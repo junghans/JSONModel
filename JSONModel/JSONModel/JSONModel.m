@@ -962,7 +962,20 @@ static JSONKeyMapper* globalKeyMapper = nil;
             }
             continue;
         }
-        
+        //Unknown protocol array
+        if([value isKindOfClass:NSArray.class] && !p.protocol){
+            NSMutableArray* array = [NSMutableArray new];
+            for (id obj in value) {
+                if ([obj isKindOfClass:JSONModelClass]) {
+                    [array addObject:[obj toDictionary]];
+                }else{
+                    [array addObject:obj];
+                }
+            }
+            
+            [tempDictionary setValue:array forKeyPath:keyPath];
+            continue;
+        }
         //check if the property is another model
         if ([value isKindOfClass:JSONModelClass]) {
 
